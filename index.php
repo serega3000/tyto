@@ -30,7 +30,7 @@
 	}
 	
 	$interface_info_data_file = __DIR__."/data/interface.json";
-	$interface_id = isset($_COOKIE['interface_id']) ? $_COOKIE['interface_id'] : uniqid();
+	$interface_id = uniqid();
 
 	if(file_exists($interface_info_data_file))
 	{
@@ -38,14 +38,12 @@
 		$interface_time = $interface_data['time'];
 		$last_interface_id = $interface_data['id'];
 		
-		if($interface_id != $last_interface_id && $interface_time > time() - 60)
+		if($interface_id != $last_interface_id && $interface_time > time() - 20)
 		{
-			echo "already opened in another window. Or wait ".($interface_time - time() + 60)."sec.";
+			echo "already opened in another window. Or wait ".($interface_time - time() + 20)."sec.";
 			exit;
 		}
 	}		
-	
-	setcookie("interface_id", $interface_id, time() + 3600);
 	
 	file_put_contents($interface_info_data_file, json_encode(array(
 		"id" => $interface_id,
