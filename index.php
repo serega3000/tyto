@@ -342,9 +342,17 @@ helpModal.addEventListener('click', function(event) {
 			var tyto = this;
 			var data = JSON.stringify(tyto._createBarnJSON());
 			$.post("save.php", {data: data}, function(result){				
-				if(result != 'ok') alert(result);	
+				if(result == 'ok')
+				{
+					tyto.notify('board saved', 2000);
+					return;
+				}	
+				if(result != 'same')
+				{
+					alert(data);
+				}
 			});
-			return this.notify('board saved', 2000);
+			return true;
 		};	
 		
 		tyto.prototype._loadTemplates = function() {
@@ -361,6 +369,10 @@ helpModal.addEventListener('click', function(event) {
 		$.getJSON('data/data.json',function(result){
 			data = result;
 			var myTyto = new tyto();
+			
+			setInterval(function(){
+				myTyto.saveBarn();			
+			}, 10000);
 		});
 	})();
 	

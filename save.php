@@ -6,9 +6,16 @@ if(isset($_POST['data']))
 	
 	if(file_exists($filename))
 	{
+		$old_data = file_get_contents($filename);
+		if($old_data == $_POST['data'])
+		{
+			echo "same";
+			exit;
+		}
+		
 		$time = date("Y.m.d H:i",filemtime($filename));		
 		$save_file = __DIR__."/data/{$time}.json";
-		copy($filename, $save_file);
+		copy($filename, $save_file);				
 	}
 	
 	file_put_contents($filename, $_POST['data']);
