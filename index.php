@@ -28,6 +28,29 @@
 	{
 		file_put_contents($filename, file_get_contents(__DIR__."/init_data.json"));
 	}
+	
+	$interface_info_data_file = __DIR__."/data/interface.json";
+	$interface_id = isset($_COOKIE['interface_id']) ? $_COOKIE['interface_id'] : uniqid();
+
+	if(file_exists($interface_info_data_file))
+	{
+		$interface_data = (array)json_decode(file_get_contents($interface_info_data_file));
+		$interface_time = $interface_data['time'];
+		$last_interface_id = $interface_data['id'];
+		
+		if($interface_id != $last_interface_id && $interface_time > time() - 60)
+		{
+			echo "already opened in another window. Or wait ".($interface_time - time() + 60)."sec.";
+			exit;
+		}
+	}		
+	
+	setcookie("interface_id", $interface_id, time() + 3600);
+	
+	file_put_contents($interface_info_data_file, json_encode(array(
+		"id" => $interface_id,
+		"time" => time()
+	)));	
 
 ?><!DOCTYPE html>
 <!--[if lt IE 7]>
@@ -328,7 +351,9 @@ helpModal.addEventListener('click', function(event) {
 <script>
 	
 	(function(){
-		var data = null;		
+		var data = null;
+		
+		var interface_id = '<?= $interface_id?>';
 
 
 		tyto.prototype._init = function() {
@@ -341,7 +366,7 @@ helpModal.addEventListener('click', function(event) {
 		tyto.prototype.saveBarn = function() {
 			var tyto = this;
 			var data = JSON.stringify(tyto._createBarnJSON());
-			$.post("save.php", {data: data}, function(result){				
+			$.post("save.php", {data: data,interface_id: interface_id}, function(result){				
 				if(result == 'ok')
 				{
 					tyto.notify('board saved', 2000);
@@ -349,7 +374,7 @@ helpModal.addEventListener('click', function(event) {
 				}	
 				if(result != 'same')
 				{
-					alert(data);
+					alert(result);
 				}
 			});
 			return true;
