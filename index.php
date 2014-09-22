@@ -370,6 +370,8 @@ helpModal.addEventListener('click', function(event) {
 			data = result;
 			var myTyto = new tyto();
 			
+			$('.cookie-banner').remove();
+			
 			setInterval(function(){
 				myTyto.saveBarn();			
 			}, 10000);
