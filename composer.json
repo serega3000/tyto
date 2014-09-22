@@ -2,18 +2,18 @@
 	"name"       :"tyto-php",
 	"type"       :"project",	
 	"require": {
-		"tyto/tyto" : "1"
+		"tyto/tyto" : "1.2.3"
 	},
     "repositories":[
         {
             "type":"package",
             "package":{
                 "name":"tyto/tyto",
-                "version":"1",
+                "version":"1.2.3",
                 "source":{
                     "type":"git",
                     "url":"https://github.com/jh3y/tyto",
-                    "reference":"gh-pages"
+                    "reference":"refs/remotes/origin/gh-pages"
                 }
             }
         }
